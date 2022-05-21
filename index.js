@@ -10,20 +10,23 @@ jsonsInDir.forEach(file => {
 
     for (let i = 0; i < json.attributes.length; i++) {
         const trait = json.attributes[i];
-        if (!categories[trait.trait_type]) categories[trait.trait_type] = {};
-        if (!categories[trait.trait_type][trait.value]) categories[trait.trait_type][trait.value] = 0;
-        categories[trait.trait_type][trait.value]++;
+        const trait_type = trait.trait_type;
+        const trait_value = trait.value.replace(/[0-9]/g, '').trim();
+        if (!categories[trait_type]) categories[trait_type] = {};
+        if (!categories[trait_type][trait_value]) categories[trait_type][trait_value] = 0;
+        categories[trait_type][trait_value]++;
     }
 
     for (const category in categories) {
         if (!categoryPercents[category]) categoryPercents[category] = {};
         const traits = categories[category];
         for (const trait in traits) {
-            const count = traits[trait];
-            categoryPercents[category][trait] = (count / jsonsInDir.length) * 100;
+            const trait_type = trait;
+            const count = traits[trait_type];
+            categoryPercents[category][trait_type] = (count / jsonsInDir.length) * 100;
         }
 
     }
 });
-fs.writeFileSync('results3.json', JSON.stringify(categoryPercents));
+fs.writeFileSync('results4.json', JSON.stringify(categoryPercents));
 console.log("Wrote to file");
